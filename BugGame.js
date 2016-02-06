@@ -65,6 +65,7 @@ function setState(s) {
 
     //Level selection
     levelText = new Displayable(100,125,300,50,drawLevelText);
+    gameObjects.push(levelText);
 
   } else if(state == "game"){
     document.getElementById("ptext").innerHTML = "GAME STARTED";
