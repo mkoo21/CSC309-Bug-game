@@ -1,11 +1,9 @@
 /*
   Superclass for clickable objects
+  Subclass of Displayable
 */
-var Clickable = function(x, y, width, height, clickFunction){
-  this.x = x;
-  this.y = y;
-  this.width = width;
-  this.height = height;
+var Clickable = function(x, y, width, height, drawFunction, clickFunction){
+  this.__proto__ = new Displayable(x, y, width, height, drawFunction)
   this.click = clickFunction;
 
   this.detect = function(x,y){
