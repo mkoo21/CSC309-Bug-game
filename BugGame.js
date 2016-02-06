@@ -2,6 +2,30 @@ var clickables = [];
 var gameObjects = []; //includes clickables
 var state;
 
+//Start screen parameters
+//Start game button
+var startButtonX = 100; //x position of top left corner
+var startButtonY = 400;
+var startButtonWidth = 200;
+var startButtonHeight = 75;
+
+//Level selection
+//Text
+var levelTextX = 100;
+var levelTextY = 175;
+var levelTextWidth = 300;
+var levelTextHeight = 50;
+
+//Buttons
+var levelOneButtonX = levelTextX + 110; //Coords for center of circle
+var levelOneButtonY = levelTextY - 25;
+
+var levelTwoButtonX = levelTextX + 210;
+var levelTwoButtonY = levelOneButtonY;
+
+var levelButtonRadius = 5;
+
+//Get ready for drawing/responding
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 canvas.addEventListener("mousedown", getPosition, false);
@@ -54,8 +78,9 @@ function setState(s) {
   state = s;
   if(state == "start"){
 
-    //Start button
-    startButton = new Button(100, 400, 200,75,"Start!","startButton",
+    //Create start button
+    var startButton = new Button(startButtonX, startButtonY, startButtonWidth,
+      startButtonHeight, "Start!", "startButton",
       function(){
         setState("game");
       }, drawStartButton);
@@ -63,9 +88,30 @@ function setState(s) {
     gameObjects.push(startButton);
     clickables.push(startButton);
 
-    //Level selection
-    levelText = new Displayable(100,125,300,50,drawLevelText);
+    //Create level selection text
+    var levelText = new Displayable(levelTextX,levelTextY,levelTextWidth,
+      levelTextHeight,drawLevelText);
     gameObjects.push(levelText);
+
+    //Create level selection buttons
+    var levelOneButton = new Button(levelOneButtonX, levelOneButtonY,
+      levelButtonRadius, levelButtonRadius, "", "levelOneButton",
+      function(){
+        changeLevel(this);
+      }, drawLevelButton);
+    levelOneButton.clicked = true; // Game starts in level 1 by default
+
+    var levelTwoButton = new Button(levelTwoButtonX, levelTwoButtonY,
+      levelButtonRadius, levelButtonRadius, "", "levelTwoButton",
+      function(){
+        changeLevel(this);
+      }, drawLevelButton);
+
+    gameObjects.push(levelOneButton);
+    clickables.push(levelOneButton);
+    gameObjects.push(levelTwoButton);
+    clickables.push(levelTwoButton);
+
 
   } else if(state == "game"){
     document.getElementById("ptext").innerHTML = "GAME STARTED";
@@ -84,6 +130,25 @@ function drawStartButton(context){
 function drawLevelText(context){
   context.beginPath();
   context.fillText("Level: ",this.x,this.y);
-  context.fillText("1 ",this.x + 100, this.y - 25);
-  context.fillText("2 ",this.x + 200,this.y - 25);
+  context.fillText("1 ",this.x + 100, this.y + 25);
+  context.fillText("2 ",this.x + 200,this.y + 25);
+}
+
+function drawLevelButton(context){
+  context.beginPath();
+  context.lineWidth = 2;
+  context.arc(this.x,this.y,this.width,
+    0, 2*Math.PI);
+  if(this.clicked == true){
+    context.fill();
+  }
+  else{
+  context.stroke();
+  }
+}
+
+function changeLevel(levelButton){
+  //change level and draw a filled circle in the button
+  //Note that startbutton's click function can call setstate - this should
+  //find the other button and turn it off
 }
