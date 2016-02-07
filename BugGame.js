@@ -159,10 +159,28 @@ function changeLevel(levelButton){
   //change level and draw a filled circle in the button
   //Note that startbutton's click function can call setstate - this should
   //find the other button and turn it off
+  levelOneButton = getGameObjById("levelOneButton");
+  levelTwoButton = getGameObjById("levelTwoButton");
+  context.clearRect(0, 0, canvas.width, canvas.height); //Buttons need to be redrawn
+
   if(levelButton.id == "levelOneButton"){
     level = "One";
+    levelOneButton.clicked = true;
+    levelTwoButton.clicked = false;
   }
-
+  else{
+    // Must be level two
+    level = "Two";
+    levelOneButton.clicked = false;
+    levelTwoButton.clicked = true;
+  }
 }
 
-function get
+function getGameObjById(id){
+  for(var i = 0; i < gameObjects.length; i++){
+    if(gameObjects[i].id == id){
+      return gameObjects[i];
+    }
+  }
+  return null;
+}
