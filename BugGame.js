@@ -1,6 +1,8 @@
+//Control variables
 var clickables = [];
 var gameObjects = []; //includes clickables
 var state;
+var level;
 
 //Start screen parameters
 //Start game button
@@ -94,15 +96,18 @@ function setState(s) {
     gameObjects.push(levelText);
 
     //Create level selection buttons
-    var levelOneButton = new Button(levelOneButtonX, levelOneButtonY,
-      levelButtonRadius, levelButtonRadius, "", "levelOneButton",
+    var levelOneButton = new Button(levelOneButtonX - levelButtonRadius,
+      levelOneButtonY - levelButtonRadius,
+      2*levelButtonRadius, 2*levelButtonRadius, "", "levelOneButton",
       function(){
         changeLevel(this);
       }, drawLevelButton);
     levelOneButton.clicked = true; // Game starts in level 1 by default
+    level = 1;
 
-    var levelTwoButton = new Button(levelTwoButtonX, levelTwoButtonY,
-      levelButtonRadius, levelButtonRadius, "", "levelTwoButton",
+    var levelTwoButton = new Button(levelTwoButtonX - levelButtonRadius,
+      levelTwoButtonY - levelButtonRadius,
+      2*levelButtonRadius, 2*levelButtonRadius, "", "levelTwoButton",
       function(){
         changeLevel(this);
       }, drawLevelButton);
@@ -137,13 +142,16 @@ function drawLevelText(context){
 function drawLevelButton(context){
   context.beginPath();
   context.lineWidth = 2;
-  context.arc(this.x,this.y,this.width,
-    0, 2*Math.PI);
+  //Transform button's x, y back to center of circle, and width back to radius
+  context.arc(this.x + (this.width/2), this.y + (this.height/2),
+  this.width/2, 0, 2*Math.PI);
+
+  //Draw a filled circle for the selected level, an outline for the other
   if(this.clicked == true){
     context.fill();
   }
   else{
-  context.stroke();
+    context.stroke();
   }
 }
 
@@ -151,4 +159,10 @@ function changeLevel(levelButton){
   //change level and draw a filled circle in the button
   //Note that startbutton's click function can call setstate - this should
   //find the other button and turn it off
+  if(levelButton.id == "levelOneButton"){
+    level = "One";
+  }
+
 }
+
+function get
