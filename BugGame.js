@@ -27,6 +27,10 @@ var levelTwoButtonY = levelOneButtonY;
 
 var levelButtonRadius = 5;
 
+//Game mode
+var margin = 10; //Objects spawn within this distance of edge of viewport
+var foodRadius = 15;
+
 //Get ready for drawing/responding
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
@@ -56,7 +60,7 @@ function startGame(){
 
 /* Draw game objects by calling their draw functions
     All draw functions should have the same sig (take context as param)
-  */
+*/
 function draw(){
   //Iterate over all objects
   for(var i = 0; i < gameObjects.length;i++){
@@ -65,8 +69,7 @@ function draw(){
 }
 
 /*
-  Clear entire board (individual objects will have their own
-  clear function) (TODO)
+  Clear entire board
 */
 function clear() {
   gameObjects = [];
@@ -120,6 +123,21 @@ function setState(s) {
 
   } else if(state == "game"){
     document.getElementById("ptext").innerHTML = "GAME STARTED";
+
+    //Generate food at random locations
+    var minHeight = Math.floor(canvas.height / 2);
+    var maxHeight = Math.floor(canvas.height);
+
+    for(var i = 0; i < 5; i++){
+      //Generate random x, y where y is in the bottom half of the viewport
+      //TODO: Check for overlap
+      var x = Math.floor(Math.random() * (canvas.width - foodRadius
+        - (2 * margin))) + margin;
+      var y = Math.floor(Math.random() * Math.floor(canvas.height / 2))
+          + Math.floor(canvas.height / 2) - foodRadius - margin;
+      var food = new Displayable(x, y, foodRadius, foodRadius, drawFood);
+      gameObjects.push(food);
+    }
   }
 }
 
@@ -153,6 +171,13 @@ function drawLevelButton(context){
   else{
     context.stroke();
   }
+}
+
+function drawFood(context){
+  context.beginPath();
+  context.arc(this.x + (this.width/2), this.y + (this.height/2),
+  this.width/2, 0, 2*Math.PI);
+  context.fill();
 }
 
 function changeLevel(levelButton){

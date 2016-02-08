@@ -12,5 +12,5 @@ var Displayable = function(x, y, width, height, drawFunction){
   this.width = width;
   this.height = height;
   this.draw = drawFunction;
-  this.id = ""; // Child types may have identifiers 
+  this.id = ""; // Child types may have identifiers
 }
