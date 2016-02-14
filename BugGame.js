@@ -64,7 +64,13 @@ function startGame(){
 function draw(){
   //Iterate over all objects
   for(var i = 0; i < gameObjects.length;i++){
-    gameObjects[i].draw(context);
+    if(gameObjects[i].isDead){
+      gameObjects.splice(i,1);  //Remove dead objects (bugs/food)
+      context.clearRect(0, 0, canvas.width, canvas.height); //redraw board
+    }
+    else{
+      gameObjects[i].draw(context);
+    }
   }
 }
 
@@ -137,8 +143,10 @@ function setState(s) {
           + Math.floor(canvas.height / 2) - foodRadius - margin;
       var food = new Food(x, y, foodRadius, foodRadius, drawFood);
       gameObjects.push(food);
+      clickables.push(food);
       if(checkForCollisions(gameObjects)){ //current food collides with already existing food
         gameObjects.pop();  //try again
+        clickables.pop();
         i = i - 1;
       }
     }
@@ -152,7 +160,6 @@ function drawLevelText(context){
   context.fillText("1 ",this.x + 100, this.y + 25);
   context.fillText("2 ",this.x + 200,this.y + 25);
 }
-
 
 function changeLevel(levelButton){
   //change level and draw a filled circle in the button
