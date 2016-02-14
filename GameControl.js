@@ -2,16 +2,20 @@
 //This could probably be more efficient
 
 var checkForCollisions = function(gameObjects){
-  //margin is a space allowance (for generating food etc.)
-  var detection = false;
+  detection = false;
+  if(gameObjects.length <= 1){
+    return false;
+  }
   for(var i = 0; i < gameObjects.length; i++){
     for(var j = 0; j < gameObjects.length; j++){
-      if (i != j){
-        /*All below conditions must be true for objects to be separate,
-          or if any 1 is false you have a collision*/
+      if(i != j){
         a = gameObjects[i];
         b = gameObjects[j];
-        if(!(bottomSeparate(a,b) || topSeparate(a,b) || leftSeparate(a,b) || rightSeparate(a,b))){
+        x_dist = Math.abs(a.x - b.x);
+        y_dist = Math.abs(a.y - b.y);
+        //Taking width as radius (it doesn't need to be pixel-perfect, right?)
+        dist = Math.hypot(x_dist, y_dist);
+        if(dist < a.width + b.width){
           a.isCollided = true;
           b.isCollided = true;
           detection = true;
@@ -20,24 +24,4 @@ var checkForCollisions = function(gameObjects){
     }
   }
   return detection;
-}
-
-function bottomSeparate(i, j){
-  //I's bottom is above J's top
-  return i.y + i.height + margin < i.y;
-}
-
-function topSeparate(i, j){
-  //I's top is lower than J's bottom
-  return i.y > j.y + j.height + margin;
-}
-
-function leftSeparate(i, j){
-  //I's left is right of J's right
-  return i.x > j.x + j.width + margin;
-}
-
-function rightSeparate(i, j){
-  //I's right is left of J's left
-  return i.x + i.width + margin < j.x;
 }

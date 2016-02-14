@@ -20,12 +20,20 @@ var bugRedProb = 0.3;
 var bugOrangeProb = 0.4;
 
 //Dimension of bug hitbox
-var bugSize = 25;
+var bugSize = 15;
+var clickSize = 30;
 
 var Bug = function(x,y,color, level){
   this.__proto__ = new Displayable(x, y, bugSize, bugSize, drawBug);
-  this.dead=false;
+  this.isDead=false;
   this.color=color;
+  this.detect = function(x,y){
+    x_dist = Math.abs(this.x - x);
+    y_dist = Math.abs(this.y - y);
+    if(Math.hypot(x_dist, y_dist) <= clickSize){
+      this.isDead = true;
+    }
+  }
 
   if(color == "black"){
     this.value = bugBlackScore;
@@ -84,12 +92,6 @@ function getBugType(){
   }
 }
 
-//The bug's clickFunction
-function killBug(){
-  this.dead = true;
-  //TODO: loop should lower opacity of dead bugs
-}
-
 function drawBug(context){
 
   color = this.color;
@@ -123,6 +125,7 @@ function drawBug(context){
   x_distance = Math.cos(argc);
   y_distance = Math.sin(argc);
   factor = (this.speed/50) / (Math.sqrt(Math.pow(x_distance, 2) + Math.pow(y_distance, 2))); //force bug to move this.speed/(ticks per second) pixels
+
   this.x += factor * x_distance;
   this.y += factor * y_distance;
 

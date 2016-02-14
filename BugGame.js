@@ -76,6 +76,7 @@ function draw(){
     nBug = createBug(margin + infoBarHeight, level);
     gameObjects.push(nBug);
     bugs.push(nBug);
+    clickables.push(nBug);
   }
   else if(state == "game"&& bugCounter > 0){
     bugCounter = bugCounter - 1; //Generate a bug every 20-60 ticks
@@ -94,6 +95,16 @@ function draw(){
     }
     else{
       gameObjects[i].draw(context);
+    }
+  }
+  for(var i = 0; i < foods.length;i++){
+    if(foods[i].isDead){
+      foods.splice(i,1);  //Remove dead objects (bugs/food)
+    }
+  }
+  for(var i = 0; i < bugs.length;i++){
+    if(bugs[i].isDead){
+      bugs.splice(i,1);  //Remove dead objects (bugs/food)
     }
   }
 }
@@ -176,10 +187,9 @@ function setState(s) {
         gameObjects.pop();  //try again
         foods.pop();
         i = i - 1;
-        //Offending object has been removed -> unset collision flags
-        if(typeof foods[i] != "undefined"){
-          foods[i].isCollided = false;
-        }
+        //reset collision flags
+        gameObjects[i].isCollided = false;
+        foods[i].isCollided = false;
       }
     }
   }
