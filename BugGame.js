@@ -137,6 +137,10 @@ function setState(s) {
           + Math.floor(canvas.height / 2) - foodRadius - margin;
       var food = new Displayable(x, y, foodRadius, foodRadius, drawFood);
       gameObjects.push(food);
+      if(checkForCollisions(gameObjects)){ //current food collides with already existing food
+        gameObjects.pop();  //try again
+        i = i - 1;
+      }
     }
   }
 }

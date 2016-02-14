@@ -1,6 +1,9 @@
 //Detect collisions between game objects and set their collision flag true
 //This could probably be more efficient
-var collision = function(gameObjects){
+
+var checkForCollisions = function(gameObjects){
+  //margin is a space allowance (for generating food etc.)
+  var detection = false;
   for(var i = 0; i < gameObjects.length; i++){
     for(var j = 0; j < gameObjects.length; j++){
       if (i != j){
@@ -9,28 +12,30 @@ var collision = function(gameObjects){
         if(!(bottomSeparate && topSeparate && leftSeparate && rightSeparate)){
           i.isCollided = true;
           j.isCollided = true;
+          detection = true;
         }
       }
     }
   }
+  return detection;
 }
 
 function bottomSeparate(i, j){
   //I's bottom is above J's top
-  return i.y + i.height < i.y;
+  return i.y + i.height + margin < i.y;
 }
 
 function topSeparate(i, j){
   //I's top is lower than J's bottom
-  return i.y > j.y + j.height;
+  return i.y > j.y + j.height + margin;
 }
 
 function leftSeparate(i, j){
   //I's left is right of J's right
-  return i.x > j.x + j.width;
+  return i.x > j.x + j.width + margin;
 }
 
 function rightSeparate(i, j){
   //I's right is left of J's left
-  return i.x + i.width < j.x;
+  return i.x + i.width + margin < j.x;
 }
