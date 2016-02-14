@@ -3,6 +3,10 @@ var clickables = [];
 var gameObjects = []; //contains Displayables
 var state;
 var level;
+var score;
+var foods= [];
+var bugs = [];
+var bugCounter;
 
 //Start screen parameters
 //Start game button
@@ -30,6 +34,9 @@ var levelButtonRadius = 5;
 //Game mode
 var margin = 10; //Objects spawn within this distance of edge of viewport
 var foodRadius = 15;
+
+//Info bar
+var infoBarHeight = 50;
 
 //Get ready for drawing/responding
 var canvas = document.getElementById("canvas");
@@ -62,6 +69,23 @@ function startGame(){
     All draw functions should have the same sig (take context as param)
 */
 function draw(){
+  context.clearRect(0, 0, canvas.width, canvas.height); //redraw board
+  //Generate bugs
+  if(state == "game" && bugCounter <= 0){
+    bugCounter = Math.round(Math.random()*100 + 50); //Random int from 20-60
+    nBug = createBug(margin + infoBarHeight, level);
+    gameObjects.push(nBug);
+    bugs.push(nBug);
+  }
+  else if(state == "game"&& bugCounter > 0){
+    bugCounter = bugCounter - 1; //Generate a bug every 20-60 ticks
+  }
+
+  //Check for collisions
+  if(state == "game"){
+    
+  }
+
   //Iterate over all objects
   for(var i = 0; i < gameObjects.length;i++){
     if(gameObjects[i].isDead){
@@ -88,6 +112,8 @@ function setState(s) {
   clear();
   state = s;
   if(state == "start"){
+    score = 0;
+    bugCounter = -1;
 
     //Create start button
     var startButton = new Button(startButtonX, startButtonY, startButtonWidth,
@@ -131,7 +157,7 @@ function setState(s) {
     document.getElementById("ptext").innerHTML = "GAME STARTED";
 
     //Generate food at random locations
-    var minHeight = Math.floor(canvas.height / 2);
+    var minHeight = Math.floor(canvas.height / 2) + infoBarHeight;
     var maxHeight = Math.floor(canvas.height);
 
     for(var i = 0; i < 5; i++){
@@ -142,11 +168,13 @@ function setState(s) {
       var y = Math.floor(Math.random() * Math.floor(canvas.height / 2))
           + Math.floor(canvas.height / 2) - foodRadius - margin;
       var food = new Food(x, y, foodRadius, foodRadius, drawFood);
+
       gameObjects.push(food);
-      clickables.push(food);
+      foods.push(food);
+
       if(checkForCollisions(gameObjects)){ //current food collides with already existing food
         gameObjects.pop();  //try again
-        clickables.pop();
+        foods.pop();
         i = i - 1;
       }
     }
@@ -170,13 +198,13 @@ function changeLevel(levelButton){
   context.clearRect(0, 0, canvas.width, canvas.height); //Buttons need to be redrawn
 
   if(levelButton.id == "levelOneButton"){
-    level = "One";
+    level = 1;
     levelOneButton.clicked = true;
     levelTwoButton.clicked = false;
   }
   else{
     // Must be level two
-    level = "Two";
+    level = 2;
     levelOneButton.clicked = false;
     levelTwoButton.clicked = true;
   }
@@ -189,4 +217,21 @@ function getGameObjById(id){
     }
   }
   return null;
+}
+
+function findNearest(x,y){
+  //Lets bugs find nearest food
+  var Findex;
+
+  var Distance = 10000;
+
+  for(var i=0;i<foods.length;i++){
+    if(foods[i]!=null)    {
+      if(Math.sqrt(Math.pow((foods[i].x-x),2)+ Math.pow((foods[i].y-y),2))<Distance){
+        Distance= Math.sqrt(Math.pow((foods[i].x-x),2)+ Math.pow((foods[i].y-y),2));
+        Findex=i;
+      }
+    }
+  }
+  return Findex;
 }

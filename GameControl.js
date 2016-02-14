@@ -9,7 +9,9 @@ var checkForCollisions = function(gameObjects){
       if (i != j){
         /*All below conditions must be true for objects to be separate,
           or if any 1 is false you have a collision*/
-        if(!(bottomSeparate && topSeparate && leftSeparate && rightSeparate)){
+        a = gameObjects[i];
+        b = gameObjects[j];
+        if(!(bottomSeparate(a,b) || topSeparate(a,b) || leftSeparate(a,b) || rightSeparate(a,b))){
           i.isCollided = true;
           j.isCollided = true;
           detection = true;

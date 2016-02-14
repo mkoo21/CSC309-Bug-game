@@ -16,12 +16,10 @@ function drawFood(context){
   context.strokeStyle = 'black';
   context.stroke();
   if(this.isCollided){
-    this.opacity = this.opacity - 0.025;
-    if(opacity <= 0){
-      this.isDead == true;
+    this.isDead == true;
     }
-  }
 }
+
 
 function killOnClick(food){
   //For testing only
