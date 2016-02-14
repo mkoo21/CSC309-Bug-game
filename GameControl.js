@@ -12,8 +12,8 @@ var checkForCollisions = function(gameObjects){
         a = gameObjects[i];
         b = gameObjects[j];
         if(!(bottomSeparate(a,b) || topSeparate(a,b) || leftSeparate(a,b) || rightSeparate(a,b))){
-          i.isCollided = true;
-          j.isCollided = true;
+          a.isCollided = true;
+          b.isCollided = true;
           detection = true;
         }
       }

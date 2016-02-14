@@ -83,7 +83,7 @@ function draw(){
 
   //Check for collisions
   if(state == "game"){
-    
+    checkForCollisions(gameObjects);
   }
 
   //Iterate over all objects
@@ -176,6 +176,10 @@ function setState(s) {
         gameObjects.pop();  //try again
         foods.pop();
         i = i - 1;
+        //Offending object has been removed -> unset collision flags
+        if(typeof foods[i] != "undefined"){
+          foods[i].isCollided = false;
+        }
       }
     }
   }

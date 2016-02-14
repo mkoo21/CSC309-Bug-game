@@ -17,11 +17,5 @@ function drawFood(context){
   context.stroke();
   if(this.isCollided){
     this.isDead == true;
-    }
-}
-
-
-function killOnClick(food){
-  //For testing only
-  food.isCollided = true;
+  }
 }
