@@ -88,7 +88,7 @@ function setState(s) {
       startButtonHeight, "Start!", "startButton",
       function(){
         setState("game");
-      }, drawStartButton);
+      }, "start");
 
     gameObjects.push(startButton);
     clickables.push(startButton);
@@ -104,7 +104,7 @@ function setState(s) {
       2*levelButtonRadius, 2*levelButtonRadius, "", "levelOneButton",
       function(){
         changeLevel(this);
-      }, drawLevelButton);
+      }, "level");
     levelOneButton.clicked = true; // Game starts in level 1 by default
     level = 1;
 
@@ -113,7 +113,7 @@ function setState(s) {
       2*levelButtonRadius, 2*levelButtonRadius, "", "levelTwoButton",
       function(){
         changeLevel(this);
-      }, drawLevelButton);
+      }, "level");
 
     gameObjects.push(levelOneButton);
     clickables.push(levelOneButton);
@@ -135,7 +135,7 @@ function setState(s) {
         - (2 * margin))) + margin;
       var y = Math.floor(Math.random() * Math.floor(canvas.height / 2))
           + Math.floor(canvas.height / 2) - foodRadius - margin;
-      var food = new Displayable(x, y, foodRadius, foodRadius, drawFood);
+      var food = new Food(x, y, foodRadius, foodRadius, drawFood);
       gameObjects.push(food);
       if(checkForCollisions(gameObjects)){ //current food collides with already existing food
         gameObjects.pop();  //try again
@@ -145,14 +145,6 @@ function setState(s) {
   }
 }
 
-function drawStartButton(context){
-  context.beginPath();
-  context.lineWidth="5";
-  context.rect(this.x, this.y, this.width, this.height);
-  context.stroke();
-  context.font="30px Arial";
-  context.fillText(this.text,this.x + this.width/3,this.y + this.height/1.5);
-}
 
 function drawLevelText(context){
   context.beginPath();
@@ -161,28 +153,6 @@ function drawLevelText(context){
   context.fillText("2 ",this.x + 200,this.y + 25);
 }
 
-function drawLevelButton(context){
-  context.beginPath();
-  context.lineWidth = 2;
-  //Transform button's x, y back to center of circle, and width back to radius
-  context.arc(this.x + (this.width/2), this.y + (this.height/2),
-  this.width/2, 0, 2*Math.PI);
-
-  //Draw a filled circle for the selected level, an outline for the other
-  if(this.clicked == true){
-    context.fill();
-  }
-  else{
-    context.stroke();
-  }
-}
-
-function drawFood(context){
-  context.beginPath();
-  context.arc(this.x + (this.width/2), this.y + (this.height/2),
-  this.width/2, 0, 2*Math.PI);
-  context.fill();
-}
 
 function changeLevel(levelButton){
   //change level and draw a filled circle in the button
