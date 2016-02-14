@@ -13,4 +13,5 @@ var Displayable = function(x, y, width, height, drawFunction){
   this.height = height;
   this.draw = drawFunction;
   this.id = ""; // Child types may have identifiers
+  this.isCollided = false;
 }

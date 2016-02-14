@@ -34,3 +34,6 @@ function killBug(){
   this.dead = true;
   //TODO: loop should lower opacity of dead bugs
 }
+
+//Set speed to 0 in collision function
+//If not collided (flag?) set speed to speed

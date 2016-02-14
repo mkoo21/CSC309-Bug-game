@@ -1,6 +1,6 @@
 //Control variables
 var clickables = [];
-var gameObjects = []; //includes clickables
+var gameObjects = []; //contains Displayables
 var state;
 var level;
 
